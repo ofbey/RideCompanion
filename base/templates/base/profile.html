@@ -12,7 +12,8 @@
       <div class="profile">
         <div class="profile__avatar">
           <div class="avatar avatar--large active">
-            <img src="{{user.avatar.url}}" />
+            <!-- <img src="{{user.avatar.url}}" /> -->
+            <img src="{{request.user.avatar.url}}" />
             
           </div>
         </div>
@@ -33,7 +34,7 @@
 
       <div class="roomList__header">
         <div>
-          <h2>Study Rooms Hosted by {{user.username}}</a>
+          <h2>Event Rooms Hosted by {{user.username}}</a>
           </h2>
         </div>
       </div>

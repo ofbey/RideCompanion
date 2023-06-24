@@ -22,10 +22,10 @@
         <!-- Logged In -->
         {% if request.user.is_authenticated %}
         <div class="header__user">
-          <a href="{% url 'update-user' %}">
+          <a href="{%  url 'user-profile' user.id %}">
             <div class="avatar avatar--medium active">
               <!-- fix me  -->
-                <img src="{% static 'images/avatar.svg' %}" />  
+                <img src="{{request.user.avatar.url}}" />  
             </div>
             <p>{{request.user.username}} <span>@{{request.user.username}}</span></p>
           </a>

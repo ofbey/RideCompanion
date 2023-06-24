@@ -5,9 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
-from .models import Room, Topic, City, Message
-from .forms import RoomForm, UserForm
+from .models import Room, Topic, City, Message, User
+from .forms import RoomForm, UserForm , MyUserCreationForm
 from datetime import datetime
 
 # Create your views here.
@@ -15,29 +14,28 @@ from datetime import datetime
 
 def loginPage(request):
     page = 'login'
-
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower() 
-        password = request.POST.get('password') 
+        email = request.POST.get('email').lower()
+        password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             messages.error(request, 'User does not exist')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'Username or password does not exist')
+            messages.error(request, 'Username OR password does not exit')
 
-    context = {'page' : page}
-    return render(request, 'base/login_register.html',context)
+    context = {'page': page}
+    return render(request, 'base/login_register.html', context)
 
 
 def logoutUser(request):
@@ -45,10 +43,10 @@ def logoutUser(request):
     return redirect('home')
 
 def registerPage(request):
-    form = UserCreationForm()
+    form = MyUserCreationForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -85,7 +83,7 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    room_messages = room.message_set.all()
+    room_messages = room.message_set.order_by('created')
     participants = room.participants.all()
 
     if request.method == 'POST':
