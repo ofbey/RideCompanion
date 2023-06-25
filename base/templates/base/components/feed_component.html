@@ -18,7 +18,7 @@
         <a href="{% url 'room' room.id %}">{{room.name}}</a>
     </div>
 
-    <div class="form__group">
+    <!-- <div class="form__group">
         
             <label for="room_description">Duration : {{ room.duration_minutes }} minutes</label>
           
@@ -26,6 +26,28 @@
 
             <label for="{{ room_description }}">Start Date and Time : {{ room.start_datetime }}</label>
         
+    </div> -->
+
+    <div class="form__group">
+        
+        <label for="room_description">Start Date and Time: {{ room.start_datetime }}</label>
+        
+        {% if room.duration_minutes != 0 %}
+          <label for="room_description">Duration: {{ room.duration_minutes }} minutes</label>
+        {% endif %}
+        
+        {% if room.distance != 0 %}
+          <label for="room_description">Distance: {{ room.distance }} miles</label>
+        {% endif %}
+
+        <!-- {% if room.location != "" %}
+        <label for="room_description">Location: {{ room.location }}</label>
+        {% endif %}
+
+        {% if room.days != 0 %}
+        <label for="room_description">Days: {{ room.days }}</label>
+        {% endif %} -->
+    
     </div>
 
 

@@ -1,8 +1,10 @@
 {% load static %}
 <header class="header header--loggedIn">
+
     <div class="container">
         <a href="{% url 'home' %}" class="header__logo">
             <!-- <img src="{% static 'images/logo.svg' %}" /> -->
+            <button class="btn btn--main btn--pill">Home</button>
             <h1>Ride Companion</h1>
         </a>
         <form class="header__search" method="GET" action="{% url 'home' %}">
@@ -17,7 +19,8 @@
             </label>
         </form>
         <nav class="header__menu">
-    
+        
+          
 
         <!-- Logged In -->
         {% if request.user.is_authenticated %}

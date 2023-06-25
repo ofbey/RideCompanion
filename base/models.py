@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
     bio = models.TextField(null=True)
@@ -11,7 +10,7 @@ class User(AbstractUser):
     avatar = models.ImageField(null=True, default="avatar.svg")
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
@@ -33,10 +32,12 @@ class Room(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
+    
     participants = models.ManyToManyField(
         User, related_name='participants', blank=True)
-
+    description = models.TextField(null=True, blank=True)
+    # location = models.CharField(max_length=100, null=True, blank=True)
+    # days = models.PositiveIntegerField(null=True, blank=True)
     duration_minutes = models.FloatField(null=True, blank=True)
     distance = models.FloatField(null=True, blank=True)
     start_datetime = models.DateTimeField(null=True, blank=True)  

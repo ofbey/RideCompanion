@@ -982,6 +982,7 @@ a {
   }
 }
 
+
 .room__top,
 .participants__top {
   background: var(--color-dark-light);
@@ -1165,7 +1166,7 @@ a {
 }
 
 .room__description {
-  font-size: 1.4rem;
+  font-size: rem;
   margin-top: 0.5rem;
   color:var(--color-gray);
 }

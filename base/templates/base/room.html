@@ -68,7 +68,7 @@
             </a>
           </div>
           
-         <div class="form__group">
+         <!-- <div class="form__group">
         
             <label for="room_description">Duration : {{ room.duration_minutes }} minutes</label>
           
@@ -76,11 +76,32 @@
 
             <label for="room_description">Start Date and Time : {{ room.start_datetime }}</label>
         
-    </div>
-          <!-- <div class="room__description">
+          </div> -->
+          <div class="form__group">
+        
+            <label for="room_description">Start Date and Time: {{ room.start_datetime }}</label>
+            
+            {% if room.duration_minutes != 0 %}
+              <label for="room_description">Duration: {{ room.duration_minutes }} minutes</label>
+            {% endif %}
+            
+            {% if room.distance != 0 %}
+              <label for="room_description">Distance: {{ room.distance }} miles</label>
+            {% endif %}
+    
+            <!-- {% if room.location != "" %}
+            <label for="room_description">Location: {{ room.location }}</label>
+            {% endif %}
+
+            {% if room.days != 0 %}
+            <label for="room_description">Days: {{ room.days }}</label>
+            {% endif %} -->
+        </div>
+        {% if room.description%}
+          <div class="room__description">
             {{ room.description }}
           </div>
-           -->
+          {% endif %}
           <span class="room__topics">{{ room.city }}</span>
           <span class="room__topics">{{room.topic}}</span>
         </div>

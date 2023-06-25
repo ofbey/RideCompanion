@@ -26,8 +26,10 @@ class UserForm(ModelForm):
 
 class RoomForm(forms.ModelForm):
     start_datetime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-    duration_minutes = forms.FloatField(min_value=0)
+    duration_minutes = forms.FloatField(required=False,min_value=0)
     distance = forms.FloatField(required=False, min_value=0)
+    # location = forms.CharField(required=False, max_length=100)
+    # days = forms.IntegerField(required=False, min_value=0)
 
     class Meta:
         model = Room

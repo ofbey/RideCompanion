@@ -81,6 +81,7 @@ def home(request):
                'room_count': room_count, 'room_messages': room_messages, 'topics':topics}
     return render(request, 'base/home.html', context)
 
+@login_required(login_url='login')
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.order_by('created')
@@ -99,7 +100,7 @@ def room(request, pk):
                'participants': participants}        
     return render(request, 'base/room.html', context)
 
-
+@login_required(login_url='login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
@@ -130,6 +131,18 @@ def createRoom(request):
         if not distance:
             distance = 0  # Set distance to 0 if it's empty
 
+        duration_minutes = request.POST.get('duration_minutes')
+        if not duration_minutes:
+            duration_minutes = 0  # Set duration_minutes to 0 if it's empty
+
+        # location = request.POST.get('location')
+        # if not location:
+        #     location = ""  
+
+        # days = request.POST.get('days')
+        # if not days:
+        #     days = 0  
+
         start_datetime_str = request.POST.get('start_datetime')
         start_datetime = datetime.strptime(start_datetime_str, '%Y-%m-%dT%H:%M')
 
@@ -139,9 +152,11 @@ def createRoom(request):
             city=city,
             name=request.POST.get('name'),
             description=request.POST.get('description'),
-            duration_minutes=request.POST.get('duration_minutes'),
+            duration_minutes=duration_minutes,
             distance=distance,
             start_datetime=start_datetime,
+            # location=location,
+            # days=days
         )
         return redirect('home')
 
@@ -174,6 +189,9 @@ def updateRoom(request, pk):
         room.duration_minutes = request.POST.get('duration_minutes')
         room.distance = request.POST.get('distance')
         room.start_datetime = request.POST.get('start_datetime')
+
+        # room.location = request.POST.get('location')
+        # room.days = request.POST.get('days')
         room.save()
         return redirect('home')
 
