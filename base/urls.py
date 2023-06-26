@@ -36,3 +36,4 @@ urlpatterns = [
     path('cities/', views.cityPage, name="cities"),
  
 ]
+
