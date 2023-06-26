@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from PIL import Image
 
 class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
@@ -11,6 +11,16 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+        
+    #     img = Image.open(self.avatar.path)
+    #     if img.height > 300 or img.width > 300:
+    #         output_size = (300, 300) 
+    #         img.thumbnail(output_size)
+    #         img.save(self.avatar.path)
+
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
@@ -31,11 +41,11 @@ class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=200)
-    
+
+    name = models.CharField(max_length=100)
     participants = models.ManyToManyField(
         User, related_name='participants', blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True,max_length=200 )
     # location = models.CharField(max_length=100, null=True, blank=True)
     # days = models.PositiveIntegerField(null=True, blank=True)
     duration_minutes = models.FloatField(null=True, blank=True)

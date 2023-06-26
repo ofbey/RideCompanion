@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, City, Message, User
 from .forms import RoomForm, UserForm , MyUserCreationForm
 from datetime import datetime
+from django.contrib.auth.forms import PasswordResetForm
+
 
 # Create your views here.
 
@@ -30,6 +32,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, f'You are successfully logged in')
             return redirect('home')
         else:
             messages.error(request, 'Username OR password does not exit')
@@ -40,6 +43,7 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
+    messages.error(request, 'You have been logged out')
     return redirect('home')
 
 def registerPage(request):
@@ -52,6 +56,7 @@ def registerPage(request):
             user.username = user.username.lower()
             user.save()
             login(request, user)
+            messages.success(request, f'Account created for {user.username}')
             return redirect('home')
         else:
             messages.error(request, 'An error occurred during registration')
@@ -67,6 +72,7 @@ def home(request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
         )
+    
 
     topics = Topic.objects.all()[0:5]
     cities = City.objects.all()[0:5]
@@ -76,14 +82,15 @@ def home(request):
     room_messages = Message.objects.filter(
     Q(room__city__name__icontains=q) | Q(room__topic__name__icontains=q)
     )[:3]
-
+    paginated_by = 2
     context = {'rooms': rooms, 'cities': cities,
                'room_count': room_count, 'room_messages': room_messages, 'topics':topics}
     return render(request, 'base/home.html', context)
 
 @login_required(login_url='login')
 def room(request, pk):
-    room = Room.objects.get(id=pk)
+    # room = Room.objects.get(id=pk)
+    room = get_object_or_404(Room, id=pk)
     room_messages = room.message_set.order_by('created')
     participants = room.participants.all()
 
@@ -102,15 +109,19 @@ def room(request, pk):
 
 @login_required(login_url='login')
 def userProfile(request, pk):
-    user = User.objects.get(id=pk)
+    # user = User.objects.get(id=pk)
+    user = get_object_or_404(User, id=pk)
     rooms = user.room_set.all()
     room_messages = user.message_set.all()
-    topics = Topic.objects.all()
-    cities = City.objects.all()
+    topics = Topic.objects.all()[0:5]
+    cities = City.objects.all()[0:5]
     
     context = {'user': user, 'rooms': rooms,
                'room_messages': room_messages, 'topics': topics,'cities': cities}
-    
+
+    if request.user == user:
+        context['delete_user'] = True
+
     return render(request, 'base/profile.html', context)
 
 
@@ -212,8 +223,6 @@ def deleteRoom(request, pk):
     
     return render(request, 'base/delete.html', {'obj': room})
 
-
-
 @login_required(login_url='login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
@@ -228,6 +237,18 @@ def deleteMessage(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 @login_required(login_url='login')
+def deleteUser(request):
+    if request.method == 'POST':
+        user = request.user
+        # Perform any additional cleanup or related deletion tasks here if needed
+        user.delete()
+        logout(request)
+        messages.success(request, 'Your profile has been deleted')
+        return redirect('home')
+
+    return render(request, 'base/delete_user.html', {'obj': request.user})
+
+@login_required(login_url='login')
 def updateUser(request):
     user = request.user
     form = UserForm(instance=user)
@@ -236,9 +257,13 @@ def updateUser(request):
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your profile has been updated')
             return redirect('user-profile', pk=user.id)
 
     return render(request, 'base/update-user.html', {'form': form})
+
+
+
 
 def topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
