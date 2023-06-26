@@ -32,7 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG').lower() == 'true'
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["157.245.132.178"]
 
 
 # Application definition
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'ridecompanion',
+   
    
 ]
 
@@ -161,7 +163,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/images')
 
 
 # Default primary key field type

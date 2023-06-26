@@ -16,13 +16,13 @@ pip install virtualenv
 
 ```bash
 
-py -3 -m venv venv
+python3 -m venv venv
 
 ```
 
 ```bash
 
-venv\Scripts\activate.bat
+source venv/bin/activate
 
 ```
 
