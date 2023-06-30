@@ -9,10 +9,10 @@
             </div>
             <span>@{{room.host.username}}</span>
         </a>
-        {% endif %}
+        {% else %}
      
             <span>@deleted user</span>
-        
+            {% endif %}
         <div class="roomListRoom__actions">
             <span>{{room.created|timesince}} ago</span>
         </div>
