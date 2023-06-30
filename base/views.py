@@ -87,7 +87,7 @@ def home(request):
                'room_count': room_count, 'room_messages': room_messages, 'topics':topics}
     return render(request, 'base/home.html', context)
 
-@login_required(login_url='login')
+
 def room(request, pk):
     # room = Room.objects.get(id=pk)
     room = get_object_or_404(Room, id=pk)
@@ -95,13 +95,16 @@ def room(request, pk):
     participants = room.participants.all()
 
     if request.method == 'POST':
-        message = Message.objects.create(
-            user=request.user,
-            room=room,
-            body=request.POST.get('body')
-        )
-        room.participants.add(request.user)
-        return redirect('room', pk=room.id)
+        if request.user.is_authenticated:
+            message = Message.objects.create(
+                user=request.user,
+                room=room,
+                body=request.POST.get('body')
+            )
+            room.participants.add(request.user)
+            return redirect('room', pk=room.id)
+        else:
+            return redirect('login')
 
     context = {'room': room, 'room_messages': room_messages,
                'participants': participants}        
