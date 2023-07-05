@@ -94,32 +94,32 @@ WSGI_APPLICATION = 'ridecompanion.wsgi.application'
 #  Database
 #     https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-# if DEBUG:
-   
-#     DATABASES = {
+# DATABASES = {
 #         'default': {
 #             'ENGINE': 'django.db.backends.sqlite3',
 #             'NAME': BASE_DIR / 'db.sqlite3',
 #         }
 #     }
-# else:
-#     DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#          'PASSWORD': os.getenv('DB_PASSWORD'),
-#          'HOST': os.getenv('DB_HOST'),
-#         'PORT': "" ,
-#     }
-# }
+
+if DEBUG:
+   
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+         'PASSWORD': os.getenv('DB_PASSWORD'),
+         'HOST': os.getenv('DB_HOST'),
+        'PORT': "" ,
+    }
+}
 
 
 
@@ -155,9 +155,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# import dj_database_url
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -166,17 +166,17 @@ DATABASES['default'].update(db_from_env)
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/images/'
+MEDIA_URL = '/media/'
 
 
-# STATICFILES_DIRS = [
-#             os.path.join(BASE_DIR, 'static')
-#        ]
+STATICFILES_DIRS = [
+            os.path.join(BASE_DIR, 'static')
+       ]
 #for production
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
 # =STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 

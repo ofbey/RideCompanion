@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 <main class="profile-page layout layout--3">
   <div class="container">
@@ -14,6 +14,7 @@
           <div class="avatar avatar--large active">
             <!-- <img src="{{user.avatar.url}}" /> -->
             <img src="{{request.user.avatar.url}}" />
+            
             
           </div>
         </div>
@@ -40,7 +41,7 @@
 
       <div class="roomList__header">
         <div>
-          <h2>Event Rooms Hosted by {{user.username}}</a>
+          <h2>Events Hosted by {{user.username}}</a>
           </h2>
         </div>
       </div>

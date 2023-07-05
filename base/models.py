@@ -7,19 +7,19 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, null=True)
     bio = models.TextField(null=True)
 
-    avatar = models.ImageField(null=True, default="avatar.svg")
+    avatar = models.ImageField(null=True, default="avatar.png")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         
-    #     img = Image.open(self.avatar.path)
-    #     if img.height > 300 or img.width > 300:
-    #         output_size = (300, 300) 
-    #         img.thumbnail(output_size)
-    #         img.save(self.avatar.path)
+        img = Image.open(self.avatar.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300) 
+            img.thumbnail(output_size)
+            img.save(self.avatar.path)
 
 
 class Topic(models.Model):
